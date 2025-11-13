@@ -69,11 +69,15 @@ namespace ComboBoxBugRepro1.ViewModels
         {
             if (value is not null)
             {
-                Countries = [.. AllCountries.Where(c => c.RegionId == value.Id) ];
+                Countries.Clear();
+                foreach (var country in AllCountries.Where(c => c.RegionId == value.Id))
+                {
+                    Countries.Add(country);
+                }
             }
             else
             {
-                Countries = [];
+                Countries.Clear();
                 SelectedCountry = null;
             }
         }
@@ -84,7 +88,11 @@ namespace ComboBoxBugRepro1.ViewModels
 
         public MainWindowViewModel()
         {
-            Regions = [.. AllRegions];
+            Regions.Clear();
+            foreach (var region in AllRegions)
+            {
+                Regions.Add(region);
+            }
         }
     }
 }
