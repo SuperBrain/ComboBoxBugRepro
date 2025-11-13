@@ -1,7 +1,10 @@
 # ComboBoxBugRepro1
 This repository is used to reproduce several visual bugs still present in WPF with .NET 9 (.NET 9.0.9 was used at the time when this was created).
 
-To fully experience all the bugs, make sure you first select "North America" in the Region ComboBox. This will load only 3 countries. After that, switch to any other region and notice how you can still see only 3 items, even though other regions have more.
+To fully experience all the bugs, make sure you first select "North America" in the Region ComboBox. This will load only 3 countries. After that, switch to any other region and notice how you can still see only 3 countries, even though other regions have more.
+
+## [UPDATE]
+After upgrading to .NET 10, this issue is still present.
 
 Bugs being showcased:
 1. On 1st Region selection, Country ComboBox will properly load all the belonging countries. On every subsequent Region change, you will notice how Country ComboBox dropdown height still matches height from first selection
