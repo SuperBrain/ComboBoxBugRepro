@@ -6,6 +6,10 @@ namespace ComboBoxBugRepro1.ViewModels
 {
     internal sealed partial class MainWindowViewModel : ObservableObject
     {
+        // DISCLAIMER:
+        //   Lists below are for testing purposes only
+        //   They are not supposed to represent complete or correct data
+
         private List<RegionDTO> AllRegions = [
             new() { Id = 1, Name = "North America" },
             new() { Id = 2, Name = "Central and Latin America" },
@@ -69,15 +73,11 @@ namespace ComboBoxBugRepro1.ViewModels
         {
             if (value is not null)
             {
-                Countries.Clear();
-                foreach (var country in AllCountries.Where(c => c.RegionId == value.Id))
-                {
-                    Countries.Add(country);
-                }
+                Countries = [..AllCountries.Where(c => c.RegionId == value.Id)];
             }
             else
             {
-                Countries.Clear();
+                Countries = [];
                 SelectedCountry = null;
             }
         }
@@ -88,11 +88,7 @@ namespace ComboBoxBugRepro1.ViewModels
 
         public MainWindowViewModel()
         {
-            Regions.Clear();
-            foreach (var region in AllRegions)
-            {
-                Regions.Add(region);
-            }
+            Regions = [..AllRegions];
         }
     }
 }
