@@ -1,20 +1,26 @@
-# ComboBoxBugRepro1
-This repository is used to reproduce several visual bugs still present in WPF with .NET 9 (.NET 9.0.9 was used at the time when this was created).
-
-To fully experience all the bugs, make sure you first select "North America" in the Region ComboBox. This will load only 3 countries. After that, switch to any other region and notice how you can still see only 3 countries, even though other regions have more.
+# WPF ComboBox bugs repro
+This repository is created to reproduce several functional and visual bugs present in WPF ComboBox after introducing Fluent themes and FluentMode, starting with .NET 9.
 
 ## [UPDATE]
 After upgrading to .NET 10, this issue is still present.
 
-Bugs being showcased:
-1. On 1st Region selection, Country ComboBox will properly load all the belonging countries. On every subsequent Region change, you will notice how Country ComboBox dropdown height still matches height from first selection
-2. On every subsequent selection after 1st, Country ComboBox will always show same number of items loaded on 1st selection
-3. There is no vertical scroll bar even when there's more items being loaded than can fit in available dropdown space
+**Bugs being showcased:**
+1. ComboBox dropdown height issue
+   - Select a Region from first ComboBox to trigger loading countries for that region in the second ComboBox (suggestion: select North America as it best illustrates the issue)
+   - Open second ComboBox and notice the number of visible items (i.e. 3 for North America)
+   - Switch to a different Region (suggestion: switch to Europe as it has more countries than North America)
+   - Open the second ComboBox and notice that it still shows the same number of items
+   - Every subsequent Region change will not update second ComboBox item count and visibility
+   - If second region has less countries than the first one, Countries ComboBox dropdown height will remain the same (larger)
+2. ComboBox dropdown scrollbar visibility and size
+   - Repeate same steps as in first case
+   - If second region has more countries than first, there will be no scrollbar visible
+   - If second region has less countries than first one and scrollbar was visible then, it will remain visible with lower number of items
 
-Scrollbar isue can be resolved by implicitly enabling it on each ComboBox, just add `ScrollViewer.VerticalScrollBarVisibility="Auto"`.
+Scrollbar issue can be resolved by implicitly enabling it on each ComboBox, just add `ScrollViewer.VerticalScrollBarVisibility="Auto"`. However, after force-enabling the scrollbar, switching from region with more countries to one with less, vertical scrollbar will remain visible and dropdown will still be scrollable.
 
-4. After enabling (fixing) the scroll bar visibility, switching from "Europe" to "North America", even though there are fewer countries, vertical scroll bar will remain visible and dropdown will still be scrollable
+Opening and closing Countries ComboBox on app startup (before selecting a Region) or selecting an empty item which is present there (which is unexpected), and then selecting a Region will not populate the Countries ComboBox, it will remain completely empty.
 
-If you open the Country ComboBox right after starting the app, it will show an empty dropdown (which is expected). However, if you click on (select) the "empty item" (sometimes you don't have to select anything, just open the Country ComboBox, close it and go to selecting the Region) and then change the Region, the Country ComboBox will continue to show an "empty item" or rather no items at all.
+All these issues are present while `ThemeMode` in `App.xaml` is set to `Light`/`Dark`/`System`. If `ThemeMode` is set to `None` or property is completely removed (effectivelly reverting to Aero2 builtin Windows theme), all the above mentioned issues are gone and both ComboBox start behaving perfectly normal
 
-All these issues persist with `ThemeMode` in `App.xaml` being set to `Dark`, `Light` or `System`. If you change the value to `Noone`, this will effectively disable the Fluent theme and revert to the old Aero2, in which case all of the above issues are gone, as in, everything starts to work as expected.
+My guess is that this is related to incorrect dropdown, items and scrollbar size and visibility updates when Items collection changes and this is exclusive to Fluent theme.
