@@ -6,14 +6,37 @@
         xmlns:local="clr-namespace:ComboBoxBugRepro1"
         xmlns:vm="clr-namespace:ComboBoxBugRepro1.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="400" Width="400"
         d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=False}">
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100">
             <TextBlock Text="Region" />
             <ComboBox ItemsSource="{Binding Regions}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedRegion}" Margin="0,0,0,5" />
             <TextBlock Text="Country" />
             <ComboBox ItemsSource="{Binding Countries}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedCountry}" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock>
+                <Run Text="Number of Regions:" />
+                <Run Text="{Binding Regions.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </TextBlock>
+            <TextBlock>
+                <Run Text="Selected Region:" />
+                <Run Text="{Binding SelectedRegion.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            </TextBlock>
+            <Separator Margin="0,5" />
+            <TextBlock>
+                <Run Text="Number of Countries:" />
+                <Run Text="{Binding Countries.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </TextBlock>
+            <TextBlock>
+                <Run Text="Selected Country:" />
+                <Run Text="{Binding SelectedCountry.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            </TextBlock>
         </StackPanel>
     </Grid>
 </Window>
